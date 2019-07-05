@@ -1,0 +1,100 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@{
+    double percentageOfLove;
+    double totalVotes = ViewBag.dislikes + ViewBag.likes;
+    double difference = ViewBag.Likes - ViewBag.dislikes;
+    double views = ViewBag.views;
+
+    bool? anonymized = ViewBag.anonymized;
+
+    if (totalVotes > 0)
+    {
+        percentageOfLove = Math.Round((ViewBag.likes / totalVotes) * 100, 2);
+    }
+    else
+    {
+        percentageOfLove = 0;
+    }
+
+    <div class="spacer">
+        <div class="titlebox submissioninfo">
+            <div class="alert-h2">
+                Submission Info
+            </div>
+            <div>
+
+                @if (ViewBag.name == "deleted")
+                {
+                    <p class="h6">
+                        Posted by: [deleted]
+                    </p>
+                }
+                else
+                {
+                    if (anonymized == true)
+                    {
+                        <p class="h6">
+                            Posted by: <a href="#" class="author may-blank">@ViewBag.name</a>
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="h6">
+                            Posted by: <a href="/user/@ViewBag.name" class="author may-blank">@ViewBag.name</a>
+                        </p>
+                    }
+                }
+
+                <p class="h6">
+                    Posting time: <time title="@ViewBag.date" datetime="@ViewBag.date">@ViewBag.date</time>
+                </p>
+
+                @if (@ViewBag.lastEditDate != null)
+                {
+                    <p class="h6">
+                        Last edit time: <time title="@ViewBag.lastEditDate" datetime="@ViewBag.lastEditDate">@ViewBag.lastEditDate</time>
+                    </p>
+                }
+                else
+                {
+                    <p class="h6">
+                        Last edit time: never edited.
+                    </p>
+                }
+
+            </div>
+            <div class="alert-h2">
+                Traffic stats
+            </div>
+            <div class="submission-score-box">
+                <p class="h6">
+                    <span class="user">Views</span>: <b>@views</b>
+                </p>
+            </div>
+            <div class="alert-h2">
+                Score
+            </div>
+            <div class="submission-score-box">
+                <p class="h6">
+                    <span class="ikp" title="Submission Contribution Points"><span class="user">SCP</span></span>: <b>@difference</b>
+                </p>
+                <p class="h6">
+                    <b>@ViewBag.Likes</b> upvotes, <b>@ViewBag.Dislikes</b> downvotes (<b>@percentageOfLove%</b> upvoted it)
+                </p>
+            </div>
+            <div class="clear">
+            </div>
+        </div>
+    </div>
+}

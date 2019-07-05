@@ -1,0 +1,76 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model Voat.Data.Models.Submission
+
+@* 1 user self submission with details without comments *@
+@{
+    var commentCount = Model.Comments.Count(c => !c.IsDeleted);
+    
+    string postAge = Submissions.CalcSubmissionAge(Model.CreationDate);
+    string commentsUrl = "/v/" + Model.Subverse + "/comments/" + Model.ID;
+    int submissionScore = (int)(Model.UpCount - Model.DownCount);
+
+    //type 1 = message
+    if (Model.Type == 1)
+    {
+        <div class="submission even link self" onclick="" data-fullname="" data-ups="" data-downs="">
+            <p class="parent"></p>
+
+            <div class="midcol unvoted">
+                <div class="score dislikes">@Model.DownCount</div>
+                <div class="submissionscore">@submissionScore</div>
+                <div class="score likes">@Model.UpCount</div>
+            </div>
+
+            <a class="thumbnail self may-blank" href="/v/@Model.Subverse/comments/@Model.ID" rel="nofollow"></a>
+            <div class="entry unvoted">
+                <p class="title">
+                    <a class="title may-blank " href="@commentsUrl" tabindex="1" rel="nofollow">@Model.Title</a>
+                    <span class="domain">(<a href="/v/@Model.Subverse">v/@Model.Subverse</a>)</span>
+                </p>
+
+                @* EXPERIMENTAL EXPANDO BUTTON START *@
+                <div class="expando-button collapsed selftext" onclick="loadSelfText(this, @Model.ID)"></div>
+                <div class="expando" style="display: none;" id="@Model.ID"></div>
+                @* EXPERIMENTAL EXPANDO BUTTON END *@
+
+                <p class="tagline">
+                    submitted
+                    <time title="@Model.CreationDate" datetime="@Model.CreationDate">@postAge</time> ago by <a href="~/user/@Model.UserName" class="author may-blank">@Model.UserName</a>
+                    <span class="score unvoted">@submissionScore points</span>
+                    <span class="commentvotesratio">(<span class="post_upvotes">+@Model.UpCount</span>|<span class="post_downvotes">-@Model.DownCount</span>)</span>
+                    <span class="userattrs"></span> to <a href="/v/@Model.Subverse" class="subverse hover may-blank">@Model.Subverse</a>
+                </p>
+                <ul class="flat-list buttons">
+                    <li class="first">
+                        <a href="@commentsUrl" class="comments empty may-blank">@commentCount comments</a>
+                    </li>
+                </ul>
+                <div class="expando" style="display: none">
+                    <form style="" novalidate="novalidate" class="usertext" action="#">
+                        <div class="usertext-body may-blank-within">
+                            <div class="md">
+                                Please wait...
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="child"></div>
+            <div class="clearleft">
+                @*IE6fix*@
+            </div>
+        </div>
+    }
+
+}

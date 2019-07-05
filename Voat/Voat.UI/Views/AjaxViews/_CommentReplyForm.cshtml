@@ -1,0 +1,64 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model Voat.Data.Models.Comment
+
+@{
+    int messageId = ViewBag.MessageId;
+    int parentCommentId = ViewBag.ParentCommentId;
+}
+
+<div id="replyform-@parentCommentId">
+
+    <form id="commentreplyform-@parentCommentId" novalidate="novalidate" action="/submitcomment" method="post">
+
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <input id="ParentID" name="ParentID" value="@parentCommentId" type="hidden">
+        <input id="SubmissionID" name="SubmissionID" value="@messageId" type="hidden">
+
+        <div class="row">
+            <div class="pmreplyform col-md-5">
+                @Html.Partial("_MarkdownEditor")
+                <textarea class="commenttextarea" cols="20" id="Content" name="Content" data-val="true" data-val-length="Comment text is limited to 10.000 characters." data-val-length-max="10000" data-val-required="Comment text is required. Please fill this field." rows="3"></textarea>
+                <span class="field-validation-valid" data-valmsg-for="Content" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+
+        <div>
+            <span class="field-validation-error" data-valmsg-for="Title" data-valmsg-replace="true">
+                <span class="" id="errorMessage" style="display: none">Please enter a comment to submit.</span>
+            </span>
+        </div>
+
+        <input type="button" id="submitbutton" value="Submit reply" class="btn-whoaverse-paging" onclick="postCommentReplyAjax(this, @messageId, '@User.Identity.Name', @parentCommentId)">
+        <input type="button" id="previewButton" value="Preview" class="btn-whoaverse-paging" onclick="showMessagePreview(this,$(this.parentElement).find('#Content'),$(this.parentElement).find('#submission-preview-area'))">
+        <button class="btn-whoaverse-paging" onclick="removereplyform(@parentCommentId);" type="button">Cancel</button>
+        <br>
+        <br />
+        <div class="panel panel-default" id="submission-preview-area" style="display: none">
+            <div class="panel-heading">
+                <h4 class="panel-title">Preview</h4>
+            </div>
+            <div class="panel-body">
+                <div class="usertext-body may-blank-within">
+                    <div class="md" id="submission-preview-area-container">
+                        Loading preview...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+

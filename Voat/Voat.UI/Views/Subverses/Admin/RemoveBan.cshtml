@@ -1,0 +1,55 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model Voat.Data.Models.SubverseBan
+
+<div id="container">
+    <div id="about-main" class="content about-page" role="main">
+
+        <h1>User ban management interface for: <a href="/v/@ViewBag.SubverseName">@ViewBag.SubverseName</a></h1>
+
+        <br />
+        <div class="alert alert-danger">Are you sure you want to remove this ban?</div>
+
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.Label("Username:", new { @class = "control-label col-md-2" })
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+            <dt>
+                @Html.Label("Banned by:", new { @class = "control-label col-md-2" })
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreatedBy)
+            </dd>
+            <dt>
+                @Html.Label("Banned on:", new { @class = "control-label col-md-2" })
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CreationDate)
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm("RemoveBan", "Subverses", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <br />
+            <input type="submit" value="Remove ban" class="btn-whoaverse-medium" />
+            <br /><br />
+            @Html.ActionLink("Back to ban list", "SubverseBans", new { subversetoshow = Model.Subverse })
+        }
+    </div>
+</div>

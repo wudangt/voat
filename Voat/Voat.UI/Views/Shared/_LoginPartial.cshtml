@@ -1,0 +1,78 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@using Microsoft.AspNet.Identity;
+
+@if (Request.IsAuthenticated)
+{
+    int linkKarma = Karma.LinkKarma(User.Identity.GetUserName());
+    int commentKarma = Karma.CommentKarma(User.Identity.GetUserName());
+    int upvotesGiven = Karma.UpvotesGiven(User.Identity.GetUserName());
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "nav navbar-nav navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="header-account">
+            <div class="logged-in">
+                <span class="user">
+                    <a href="/user/@User.Identity.Name" title="Profile">@User.Identity.Name</a>
+                    <span class="userkarma" title="Submission Contribution Points"><a href="/user/@User.Identity.Name/submissions" class="userkarma" id="scp">@linkKarma</a></span>
+                    |
+                    <span class="userkarma" title="Comment Contribution Points"><a href="/user/@User.Identity.Name/comments" class="userkarma" id="ccp">@commentKarma</a></span>
+                    |
+                    <span class="upvoatsGiven" title="total upvotes given"><a href="/user/@User.Identity.Name" class="upvoatsGiven" id="upvoatsGiven">@upvotesGiven</a></span>
+                </span>
+                <span class="separator">|</span>
+                <span class="user">@Html.ActionLink("Manage", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage", id = "manage" })</span>
+                <span class="separator">|</span>
+                <a id="nightmodetoggle" onclick="toggleNightMode()" title="Toggle Night Mode"></a>
+                <span class="separator">|</span>
+                @if (UserHelper.UserHasNewMessages(User.Identity.Name))
+                {
+                    <span class="notification-container">
+                        <a title="you have new messages" href="/messaging/inbox" class="havemail" id="mail">messages</a>
+                        <span class="notification-counter" id="mailcounter">@UserHelper.UnreadTotalNotificationsCount(User.Identity.Name)</span>
+                    </span>
+                }
+                else
+                {
+                    <span class="notification-container">
+                        <a title="no new messages" href="/messaging/inbox" class="nohavemail" id="mail">messages</a>
+                        <span class="notification-counter" id="mailcounter" style="display:none"></span>
+                    </span>
+                }
+                <span class="separator">|</span>
+                <a href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    if (!Request.Browser.IsMobileDevice)
+    {
+        <div id="header-account">
+            <div class="logged-out">
+                <span class="user">want to join? <a href="#" onclick="mustLogin();" class="login-required" tabindex="1">login</a> or <a href="/account/register" tabindex="1">register</a> in seconds</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="header-account">
+            <div class="logged-out">
+                <span class="user" onclick="mustLogin();"><a href="#" class="login-required" tabindex="1">login or register</a></span>
+            </div>
+        </div>
+    }
+}
+

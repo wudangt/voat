@@ -1,0 +1,72 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model Voat.Models.ViewModels.SubverseModeratorViewModel
+
+@{
+    string subverseName = ViewBag.SubverseName;
+}
+
+<div id="container">
+    <div id="about-main" class="content about-page" role="main">
+
+        <h1>Subverse owner moderator management interface for: <a href="/v/@ViewBag.SubverseName">@ViewBag.SubverseName</a></h1>
+
+        <div class="alert alert-info">Use this area to add/edit/remove moderators for your subverse.</div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.Hidden("Subverse", subverseName)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Power, htmlAttributes: new {@class = "control-label col-md-2"})
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Power, new {htmlAttributes = new {@class = "form-control", Value = "2"}})
+                        @Html.ValidationMessageFor(model => model.Power, "", new {@class = "text-danger"})
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Add" class="btn-whoaverse-medium" />
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <p>
+                        Power levels
+                    </p>
+                    <hr />
+                    <p><strong>Level 1:</strong> first clearance level. Access to all areas of subverse settings. No restrictions.</p>
+                    <p><strong>Level 2:</strong> second clearance level. Access to most areas of subverse settings. Some restrictions. Unable to add more moderators.</p>
+                </div>
+
+            </div>
+        }
+
+        <div>
+            @Html.ActionLink("Back to moderators list", "SubverseModerators", new { subversetoshow = subverseName })
+        </div>
+    </div>
+</div>

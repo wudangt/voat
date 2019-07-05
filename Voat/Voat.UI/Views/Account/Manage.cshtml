@@ -1,0 +1,80 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+@{
+    ViewBag.Title = "Manage Account";
+}
+
+<div id="container" class="page-userprofile">
+
+    @Html.Partial("~/Views/Shared/Sidebars/_SidebarUserInfo.cshtml")
+
+    <div class="content" role="main">
+
+        <div class="row nomargin">
+            <div class="well col-md-12">
+                <div class="alert-title">Your public profile</div>
+
+                @if (ViewBag.StatusMessage != String.Empty)
+                {
+                    <p class="alert alert-danger">@ViewBag.StatusMessage</p>
+                }
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <section id="userPreferences">
+                        @Html.Action("UserPreferencesAbout")
+                    </section>
+                }
+                <div class="alert-title">User preferences</div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <section id="userPreferences">
+                        @Html.Action("UserPreferences")
+                    </section>
+                }
+
+                <div class="alert-title">Account e-mail</div>
+                <section id="userEmail">
+                    @Html.Action("UserAccountEmail")
+                </section>
+
+                <div class="alert-title">Change your password</div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.Partial("_ChangeAccountSettings")
+                }
+                else
+                {
+                    @Html.Partial("_SetPasswordPartial")
+                }
+
+                <div class="alert-title">Delete your account</div>
+
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @Html.Partial("_DeleteAccount")
+                }
+
+                <section id="externalLogins">
+                    @Html.Action("RemoveAccountList")
+                </section>
+
+            </div>
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+            }
+
+        </div>
+    </div>
+</div>

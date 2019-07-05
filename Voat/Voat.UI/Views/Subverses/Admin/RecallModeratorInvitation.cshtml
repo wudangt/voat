@@ -1,0 +1,49 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model Voat.Data.Models.ModeratorInvitation
+
+<div id="container">
+    <div id="about-main" class="content about-page" role="main">
+
+        <h1>Subverse owner moderator management interface for: <a href="/v/@ViewBag.SubverseName">@ViewBag.SubverseName</a></h1>
+
+        <br />
+        <div class="alert alert-danger">Are you sure you want to recall this moderator invitation?</div>
+
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.Label("Username:", new { @class = "control-label col-md-2" })
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Recipient)
+            </dd>
+            <dt>
+                @Html.Label("Power:", new { @class = "control-label col-md-2" })
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Power)
+            </dd>
+        </dl>
+
+        @using (Html.BeginForm("RecallModeratorInvitation", "Subverses", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <br />
+            <input type="submit" value="Remove" class="btn-whoaverse-medium" />
+            <br /><br />
+            @Html.ActionLink("Back to moderators list", "SubverseModerators", new { subversetoshow = ViewBag.SubverseName })
+        }
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model IEnumerable<Voat.Data.Models.SubverseFlair>
+
+@{
+    var submissionId = ViewBag.SubmissionId;
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="modalLabel">Select a link flair to apply to this submission:</h4>
+        </div>
+        <div class="modal-body">
+            @if (Model.Any())
+            {
+                <p><b>Defined flairs:</b></p>
+                <button type="button" class="btn btn-default btn-xs" onclick="return clearflair(@submissionId)">Clear current flair</button>
+                foreach (var item in Model)
+                {
+                    <button type="button" class="btn btn-default btn-xs" onclick="return applyflair(@submissionId, @item.ID, '@item.Label', '@item.CssClass')">@item.Label</button>
+                }
+            }
+            else
+            {
+                <p><b>Defined flairs:</b></p>    
+                <button type="button" class="btn btn-default btn-xs" onclick="return clearflair(@submissionId)">Clear current flair</button>
+                <br /><br />
+                <p class="alert alert-info">This subverse does not currently have any link flairs setup. Please go to flair settings (link on your subverse sidebar) to configure link flairs.</p>
+            }
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-whoaverse-medium" data-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+</div>
+

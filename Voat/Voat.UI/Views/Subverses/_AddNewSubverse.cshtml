@@ -1,0 +1,103 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@model Voat.Models.AddSubverse
+
+@{
+    ViewBag.Title = "subverse: create new subverse";
+
+    string loggedinUser = User.Identity.Name;
+    DateTime currentdatetime = DateTime.Now;
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="alert alert-info">You are creating a new subverse. You are awesome!</div>
+        <div class="alert alert-info">Before you proceed, it is VERY IMPORTANT that you take a minute to read the <a href="/help/faq">Voat FAQ.</a></div>
+        <div class="alert alert-info">If the subverse you are trying to register is already taken and not actively used, you can try to claim it by submitting a takeover request to <a href="/v/subverserequest">/v/subverserequest</a></div>
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true)
+
+            @*Setup default values*@
+            @Html.Hidden("Creation_date", currentdatetime)
+            @Html.Hidden("Type", "link")
+            @Html.Hidden("Title", "default")
+            @Html.Hidden("Owner", loggedinUser)
+
+            <div class="form-group">
+                @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2"></div>
+                <div class="col-md-9">
+                    please note:
+                    <b>
+                        no spaces or special characters, max 20 characters
+                    </b>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Title", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Description)
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="control-label col-md-2"></div>
+                <div class="col-md-9">
+                    example:
+                    <b>
+                        a subverse for all Star Trek fans
+                    </b>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.Label("Sidebar text (optional)", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-9">
+                    @Html.TextAreaFor(m => m.Sidebar, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Sidebar)
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Are you a human?</div>
+                <div class="panel-body">
+                    <p>Please solve the reCAPTCHA challenge below:</p>
+                </div>
+            </div>
+
+            <div class="panel panel-default panel-transparent">
+                @{Html.RenderPartial("_Captcha");}
+            </div>
+
+            <div class="form-group">
+                    <input type="submit" value="Create" class="btn-whoaverse" />
+            </div>
+
+        </div>
+    }
+
+}
+

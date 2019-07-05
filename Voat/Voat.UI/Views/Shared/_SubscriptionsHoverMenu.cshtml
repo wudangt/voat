@@ -1,0 +1,44 @@
+﻿@*This source file is subject to version 3 of the GPL license,
+    that is bundled with this package in the file LICENSE, and is
+    available online at http://www.gnu.org/licenses/gpl.txt;
+    you may not use this file except in compliance with the License.
+
+    Software distributed under the License is distributed on an "AS IS" basis,
+    WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+    the specific language governing rights and limitations under the License.
+
+    All portions of the code written by Voat are Copyright (c) 2014 Voat
+    All Rights Reserved.*@
+
+@using Voat.Models.ViewModels
+
+@{
+    List<string> subscriptionList = null;
+
+    // get user subscriptions
+    if (User.Identity.IsAuthenticated)
+    {
+        subscriptionList = UserHelper.UserSubscriptions(User.Identity.Name);
+    }
+}
+
+<li>
+    <a href="#">My subverses</a>
+    <span class="drop-arrow"></span>
+    <ul>
+        <li><a href="/subverses/subscribed"><b>Edit your subscriptions</b></a></li>
+
+        @if (subscriptionList != null)
+        {
+            foreach (var subverse in subscriptionList)
+            {
+                <li><a href="/v/@subverse">@subverse</a></li>
+            }
+        }
+        else
+        {
+            <li><a href="#">You are not subscribed to any subverses.</a></li>
+        }
+    </ul>
+</li>
+
